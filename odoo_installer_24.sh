@@ -160,7 +160,9 @@ cleanup_on_exit() {
 # Get server IP address
 get_server_ip() {
     # Try multiple methods to get the server IP
-    SERVER_IP=$(curl -s ifconfig.me 2>/dev/null || curl -s ipinfo.io/ip 2>/dev/null || curl -s icanhazip.com 2>/dev/null)
+    #SERVER_IP=$(curl -s ifconfig.me 2>/dev/null || curl -s ipinfo.io/ip 2>/dev/null || curl -s icanhazip.com 2>/dev/null)
+    # Set to emptry string to faciliate Odoo running on localhost
+    SERVER_IP=""
     
     if [ -z "$SERVER_IP" ]; then
         # Fallback to local IP
@@ -228,7 +230,7 @@ check_system_requirements() {
 # Validate Odoo version selection
 validate_odoo_version() {
     case "$OE_BRANCH" in
-        "14.0"|"15.0"|"16.0"|"17.0"|"18.0")
+        "14.0"|"15.0"|"16.0"|"17.0"|"18.0"|"19.0")
             return 0
             ;;
         *)
@@ -481,7 +483,8 @@ select_odoo_version() {
         echo -e "  ${YELLOW}3)${NC} Odoo 16.0 ${CYAN}(Stable)${NC}"
         echo -e "  ${YELLOW}4)${NC} Odoo 17.0 ${CYAN}(Latest Stable)${NC}"
         echo -e "  ${YELLOW}5)${NC} Odoo 18.0 ${CYAN}(Latest - May have issues)${NC}"
-        echo -e "  ${YELLOW}6)${NC} Back to Main Menu"
+        echo -e "  ${YELLOW}6)${NC} Odoo 19.0 ${CYAN}(Latest - May have issues)${NC}"
+        echo -e "  ${YELLOW}7)${NC} Back to Main Menu"
         echo
         
         echo -e -n "${BOLD}${WHITE}Enter your choice [1-6]: ${NC}"
@@ -493,7 +496,8 @@ select_odoo_version() {
             3) OE_BRANCH="16.0"; break;;
             4) OE_BRANCH="17.0"; break;;
             5) OE_BRANCH="18.0"; break;;
-            6) return 1;;
+            6) OE_BRANCH="19.0"; break;;
+            7) return 1;;
             *) 
                 echo -e "${RED}Invalid choice. Please select 1-6.${NC}"
                 sleep 2
